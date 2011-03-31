@@ -5,12 +5,12 @@ SET(CMAKE_BUILD_TYPE Release)
 
 # プロジェクト名
 PROJECT(unmap C)
-SET(serial "1.0.0")
+SET(serial "1.0.1")
 SET(soserial "1")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")
 # ライブラリ
-ADD_LIBRARY(unmap SHARED unmap.c crc32.c)
+ADD_LIBRARY(unmap SHARED unmap.c fnv64.c)
 SET_TARGET_PROPERTIES(unmap PROPERTIES VERSION ${serial} SOVERSION ${soserial})
 INSTALL(TARGETS unmap LIBRARY DESTINATION lib)
 INSTALL(FILES unmap.h DESTINATION include)
-
+ADD_EXECUTABLE(unmap_test unmap.c unmap_test.c fnv64.c)

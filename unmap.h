@@ -29,13 +29,7 @@
 	do { unmap_free_func((unmap), (free_func)); (unmap) = NULL; } while(0)
 
 /* 32(64)bitハッシュ値 */
-typedef unsigned int unmap_hash_t;
-
-/* ハッシュ値詰め合わせ */
-typedef struct unmap_box_st {
-	unmap_hash_t hash;	/* ハッシュ値 */
-	unmap_hash_t node;	/* ノード値(ハッシュ値から算出) */
-} unmap_box_t;
+typedef unsigned long unmap_hash_t;
 
 /* 木構造 */
 typedef struct unmap_tree_st {
@@ -45,9 +39,8 @@ typedef struct unmap_tree_st {
 
 /* 連結リスト */
 typedef struct unmap_data_st {
-	unmap_box_t box;			/* ハッシュ値 */
+	unmap_hash_t hash;			/* ハッシュ値 */
 	void *data;					/* 保存データ */
-	struct unmap_data_st *next;	/* 次のリスト */
 } unmap_data_t;
 
 /* メモリ空間管理 */
@@ -65,11 +58,10 @@ typedef struct unmap_st {
 	unmap_storage_t *tree_heap;	/* メモリ空間ツリー用 */
 	unmap_storage_t *data_heap;	/* メモリ空間データ用 */
 	unmap_tree_t *tree;			/* 最初の枝 */
-	int max_level;				/* 最大階層 */
 } unmap_t;
 
 /* プロトタイプ宣言 */
-extern unmap_t *unmap_init(int max_level);
+extern unmap_t *unmap_init(void);
 extern void unmap_free_func(unmap_t *list, void (*free_func)(void *));
 extern int unmap_set(unmap_t *list, const char *key, size_t key_size, void *data);
 extern void *unmap_get(unmap_t *list, const char *key, size_t key_size);
