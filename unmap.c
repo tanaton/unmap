@@ -16,14 +16,15 @@ static unmap_data_t *unmap_area_find(unmap_t *list, unmap_tree_t *tree, unmap_ha
 inline static unmap_data_t *unmap_data_get(unmap_t *list, const char *key, size_t key_size);
 inline static void unmap_type_set(unmap_tree_t *tree, size_t level, size_t t);
 inline static size_t unmap_type_get(const unmap_tree_t *tree, size_t level);
+inline static size_t unmap_heap_extension_size(size_t size);
 
 /* unmap_tオブジェクト生成・初期化 */
 unmap_t *unmap_init(void)
 {
 	/* 初期値設定 */
 	unmap_t *list = 0;
-	size_t tree_heap_size = 0x40;
-	size_t data_heap_size = 0x100;
+	size_t tree_heap_size = 2;
+	size_t data_heap_size = 2;
 	/* unmap_tオブジェクト確保 */
 	list = unmap_malloc(sizeof(unmap_t));
 	/* tree領域確保 */
@@ -179,7 +180,7 @@ static void *unmap_storage_alloc(unmap_storage_t *st)
 			size_t len = 0;
 			size_t size = st->type_size * st->heap_size;	/* 一塊の大きさ */
 			/* 領域管理配列を拡張する */
-			st->list_size = UNMAP_HEAP_EXTENSION_SIZE(st->list_size);
+			st->list_size = unmap_heap_extension_size(st->list_size);
 			st->heap = unmap_realloc(st->heap, sizeof(void *) * st->list_size, sizeof(void *) * st->list_index);
 			/* 新しい領域を確保する */
 			len = st->list_size - st->list_index;
@@ -201,7 +202,7 @@ static void unmap_storage_free(unmap_storage_t *st)
 	size_t i = 0;
 	size_t list_size = st->list_size;
 	free(st->heap[0]);
-	for(i = UNMAP_HEAP_ARRAY_SIZE; i < list_size; i = UNMAP_HEAP_EXTENSION_SIZE(i)){
+	for(i = UNMAP_HEAP_ARRAY_SIZE; i < list_size; i = unmap_heap_extension_size(i)){
 		free(st->heap[i]);
 	}
 	free(st->heap);
@@ -370,5 +371,10 @@ inline static void unmap_type_set(unmap_tree_t *tree, size_t level, size_t t)
 inline static size_t unmap_type_get(const unmap_tree_t *tree, size_t level)
 {
 	return (tree->type >> (level << 1)) & 0x03;
+}
+
+inline static size_t unmap_heap_extension_size(size_t size)
+{
+	return size + (size >> 1);
 }
 

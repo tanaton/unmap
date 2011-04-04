@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 #define UNMAP_HEAP_ARRAY_SIZE			(2)
-#define UNMAP_HEAP_EXTENSION_SIZE(n)	((n) * 2)
 #define UNMAP_TREE_BRANCH				(0x10)
 #define UNMAP_TREE_FILTER				(UNMAP_TREE_BRANCH - 1)
 #define UNMAP_TREE_NEXT(n)				((n) -= 4)
