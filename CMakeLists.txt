@@ -5,7 +5,7 @@ SET(CMAKE_BUILD_TYPE Release)
 
 # プロジェクト名
 PROJECT(unmap C)
-SET(serial "1.0.1")
+SET(serial "1.0.2")
 SET(soserial "1")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")
 # ライブラリ

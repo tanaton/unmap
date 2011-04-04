@@ -14,22 +14,11 @@
 #define UNMAP_TYPE_DATA					(0x01)
 #define UNMAP_TYPE_TREE					(0x02)
 
-/* 型情報を取得 */
-#define UNMAP_TYPE_GET(tree, level)					\
-	(((tree)->type >> ((level) * 2)) & 0x03)
-
-/* 型情報を設定 */
-#define UNMAP_TYPE_SET(tree, level, t)				\
-	do {											\
-		(tree)->type &= (~(0x03 << ((level) * 2)));	\
-		(tree)->type |= ((t) << ((level) * 2));		\
-	} while(0)
-
 #define unmap_free(unmap, free_func)				\
 	do { unmap_free_func((unmap), (free_func)); (unmap) = NULL; } while(0)
 
-/* 32(64)bitハッシュ値 */
-typedef unsigned long unmap_hash_t;
+/* 64bitハッシュ値 */
+typedef unsigned long long unmap_hash_t;
 
 /* 木構造 */
 typedef struct unmap_tree_st {
