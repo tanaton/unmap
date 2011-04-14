@@ -7,6 +7,8 @@
 #define UNMAP_TREE_BRANCH				(0x10)
 #define UNMAP_TREE_FILTER				(UNMAP_TREE_BRANCH - 1)
 #define UNMAP_TREE_NEXT(n)				((n) -= 4)
+#define UNMAP_TREE_HEAP_LENGTH			(0x100)
+#define UNMAP_DATA_HEAP_LENGTH			(0x100)
 
 /* 型の種類 */
 #define UNMAP_TYPE_NONE					(0x00)

@@ -23,8 +23,8 @@ unmap_t *unmap_init(void)
 {
 	/* 初期値設定 */
 	unmap_t *list = 0;
-	size_t tree_heap_size = 2;
-	size_t data_heap_size = 2;
+	size_t tree_heap_size = UNMAP_TREE_HEAP_LENGTH;
+	size_t data_heap_size = UNMAP_DATA_HEAP_LENGTH;
 	/* unmap_tオブジェクト確保 */
 	list = unmap_malloc(sizeof(unmap_t));
 	/* tree領域確保 */
