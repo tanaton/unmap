@@ -13,10 +13,10 @@ static void unmap_storage_free(unmap_storage_t *st);
 static void unmap_storage_data_free(unmap_storage_t *st, void (*free_func)(void *));
 static unmap_data_t *unmap_area_get(unmap_t *list, unmap_tree_t *tree, unmap_hash_t hash);
 static unmap_data_t *unmap_area_find(unmap_t *list, unmap_tree_t *tree, unmap_hash_t hash);
-inline static unmap_data_t *unmap_data_get(unmap_t *list, const char *key, size_t key_size);
-inline static void unmap_type_set(unmap_tree_t *tree, size_t level, size_t t);
-inline static size_t unmap_type_get(const unmap_tree_t *tree, size_t level);
-inline static size_t unmap_heap_extension_size(size_t size);
+static inline unmap_data_t *unmap_data_get(unmap_t *list, const char *key, size_t key_size);
+static inline void unmap_type_set(unmap_tree_t *tree, size_t level, size_t t);
+static inline size_t unmap_type_get(const unmap_tree_t *tree, size_t level);
+static inline size_t unmap_heap_extension_size(size_t size);
 
 /* unmap_tオブジェクト生成・初期化 */
 unmap_t *unmap_init(void)
@@ -244,7 +244,7 @@ static void unmap_storage_data_free(unmap_storage_t *st, void (*free_func)(void 
 /* unmap_tツリーを生成、値の格納場所を用意 */
 static unmap_data_t *unmap_area_get(unmap_t *list, unmap_tree_t *tree, unmap_hash_t hash)
 {
-	int level = 64;
+	int level = UNMAP_BITSIZE;
 	size_t rl = 0;
 	size_t rl2 = 0;
 	unmap_data_t *data = 0;
@@ -322,7 +322,7 @@ static unmap_data_t *unmap_area_get(unmap_t *list, unmap_tree_t *tree, unmap_has
 /* unmap_tツリーを探索 */
 static unmap_data_t *unmap_area_find(unmap_t *list, unmap_tree_t *tree, unmap_hash_t hash)
 {
-	int level = 64;
+	int level = UNMAP_BITSIZE;
 	size_t rl = 0;
 	unmap_data_t *data = 0;
 	for(UNMAP_TREE_NEXT(level); level > 0; UNMAP_TREE_NEXT(level)){
@@ -351,7 +351,7 @@ static unmap_data_t *unmap_area_find(unmap_t *list, unmap_tree_t *tree, unmap_ha
 }
 
 /* 共通処理の関数化 */
-inline static unmap_data_t *unmap_data_get(unmap_t *list, const char *key, size_t key_size)
+static inline unmap_data_t *unmap_data_get(unmap_t *list, const char *key, size_t key_size)
 {
 	if((list == NULL) || (key == NULL) || (key_size == 0)){
 		return NULL;
@@ -361,19 +361,19 @@ inline static unmap_data_t *unmap_data_get(unmap_t *list, const char *key, size_
 }
 
 /* 型情報を設定 */
-inline static void unmap_type_set(unmap_tree_t *tree, size_t level, size_t t)
+static inline void unmap_type_set(unmap_tree_t *tree, size_t level, size_t t)
 {
 	tree->type &= (~(0x03 << (level << 1)));
 	tree->type |= (t << (level << 1));
 }
 
 /* 型情報を取得 */
-inline static size_t unmap_type_get(const unmap_tree_t *tree, size_t level)
+static inline size_t unmap_type_get(const unmap_tree_t *tree, size_t level)
 {
 	return (tree->type >> (level << 1)) & 0x03;
 }
 
-inline static size_t unmap_heap_extension_size(size_t size)
+static inline size_t unmap_heap_extension_size(size_t size)
 {
 	return size + (size >> 1);
 }

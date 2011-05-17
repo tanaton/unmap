@@ -2,6 +2,7 @@
 #define INCLUDE_UNMAP_H
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #define UNMAP_HEAP_ARRAY_SIZE			(2)
 #define UNMAP_TREE_BRANCH				(0x10)
@@ -19,11 +20,13 @@
 	do { unmap_free_func((unmap), (free_func)); (unmap) = NULL; } while(0)
 
 /* 64bitハッシュ値 */
-typedef unsigned long long unmap_hash_t;
+typedef uint64_t unmap_hash_t;
+
+#define UNMAP_BITSIZE					(sizeof(unmap_hash_t) * 8)
 
 /* 木構造 */
 typedef struct unmap_tree_st {
-	unsigned int type;				/* 枝の型を管理(2bitずつ) */
+	uint32_t type;					/* 枝の型を管理(2bitずつ) */
 	void *tree[UNMAP_TREE_BRANCH];	/* 枝を管理 */
 } unmap_tree_t;
 
