@@ -17,11 +17,11 @@ int main()
 	}
 	for(i = 0; i < 10000000; i++){
 		sprintf(str, "%08lu", i);
-		p = unmap_get(map, str, 8);
+		p = unmap_find(map, str, 8);
 		if(strcmp(str, p)){
 			printf("%s - %s\n", str, p);
 		}
-		free(p);
+		//free(p);
 	}
 	return 0;
 }

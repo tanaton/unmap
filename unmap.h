@@ -5,16 +5,18 @@
 #include <stdint.h>
 
 #define UNMAP_HEAP_ARRAY_SIZE			(2)
-#define UNMAP_TREE_BRANCH				(0x10)
+#define UNMAP_TREE_BRANCH				(0x04)
 #define UNMAP_TREE_FILTER				(UNMAP_TREE_BRANCH - 1)
-#define UNMAP_TREE_NEXT(n)				((n) -= 4)
+#define UNMAP_TREE_NEXT(n)				((n) -= 2)
 #define UNMAP_TREE_HEAP_LENGTH			(0x100)
 #define UNMAP_DATA_HEAP_LENGTH			(0x100)
 
 /* 型の種類 */
-#define UNMAP_TYPE_NONE					(0x00)
-#define UNMAP_TYPE_DATA					(0x01)
-#define UNMAP_TYPE_TREE					(0x02)
+typedef enum {
+	UNMAP_TYPE_NONE = 0x00,
+	UNMAP_TYPE_DATA = 0x01,
+	UNMAP_TYPE_TREE = 0x02
+} unmap_type_t;
 
 #define unmap_free(unmap, free_func)				\
 	do { unmap_free_func((unmap), (free_func)); (unmap) = NULL; } while(0)
@@ -26,11 +28,10 @@ typedef uint64_t unmap_hash_t;
 
 /* 木構造 */
 typedef struct unmap_tree_st {
-	uint32_t type;					/* 枝の型を管理(2bitずつ) */
-	void *tree[UNMAP_TREE_BRANCH];	/* 枝を管理 */
+	uintptr_t tree[UNMAP_TREE_BRANCH];	/* 枝を管理 */
 } unmap_tree_t;
 
-/* 連結リスト */
+/* データ */
 typedef struct unmap_data_st {
 	unmap_hash_t hash;			/* ハッシュ値 */
 	void *data;					/* 保存データ */
