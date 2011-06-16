@@ -15,7 +15,7 @@ static unmap_data_t *unmap_area_get(unmap_t *list, unmap_tree_t *tree, unmap_has
 static unmap_data_t *unmap_area_find(unmap_t *list, unmap_tree_t *tree, unmap_hash_t hash);
 static inline unmap_data_t *unmap_data_get(unmap_t *list, const char *key, size_t key_size);
 static inline void unmap_type_set(unmap_tree_t *tree, size_t level, unmap_type_t t);
-static inline size_t unmap_type_get(const unmap_tree_t *tree, size_t level);
+static inline unmap_type_t unmap_type_get(const unmap_tree_t *tree, size_t level);
 static inline uintptr_t unmap_addr_get(const unmap_tree_t *tree, size_t level);
 static inline void unmap_addr_set(unmap_tree_t *tree, size_t level, uintptr_t addr, unmap_type_t t);
 static inline size_t unmap_heap_extension_size(size_t size);
@@ -361,7 +361,7 @@ static inline void unmap_type_set(unmap_tree_t *tree, size_t level, unmap_type_t
 }
 
 /* 型情報を取得 */
-static inline size_t unmap_type_get(const unmap_tree_t *tree, size_t level)
+static inline unmap_type_t unmap_type_get(const unmap_tree_t *tree, size_t level)
 {
 	return tree->tree[level] & 0x03;
 }
